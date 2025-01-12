@@ -1,0 +1,84 @@
+@startuml
+title SmartHome Container Diagram
+
+top to bottom direction
+
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+Person(user, "User", "Пользователь умного дома")
+
+System_Ext(heating, "Smart Heating Devices", "Устройства умного дома для управления отоплением")
+System_Ext(temperature, "Smart Temperature Devices", "Устройства умного дома для управления температурой")
+System_Ext(lighting, "Smart Lighting Devices", "Устройства умного дома для управления освещением")
+
+System(SmartHomeSystem, "SmartHome", "Система умного дома компании Теплый дом")
+
+Container_Boundary(SmartHomeSystem, "SmartHome System") {
+  Container(WebApp, "Web Application", "Vue", "Web-приложение для управления умным домом")
+  Container(MobileApp, "Mobile Application", "Flatter", "Мобильное приложение для управления умным домом")
+  Container(APIGateway, "API Gateway", "Kong", "API-Gateway для маршрутизации, аутентификации, авторизации")
+
+  Container(CoreService, "SmartHome Service", "NestJs", "Управляет умными устройствами и быстро предоставляет данные")
+  ContainerDb(CoreDatabase, "SmartHome Database", "Postgres", "Агрегирует данные по датчикам в разрезе пользователей")
+
+  Container(AuthService, "Auth Service", "Keycloak", "Управляет аутентификацией и авторизацией пользователей")
+  ContainerDb(AuthDatabase, "Auth Database", "Postgres", "Хранит данные пользователей и авторизационную информацию")
+
+  Container(HeatingService, "Heating Service", "NestJs", "Управляет устройствами отопления")
+  Container(TemperatureService, "Temperature Service", "NestJs", "Управляет датчиками температуры")
+  Container(LightingService, "Lighting Service", "NestJs", "Управляет датчиками освещения")
+
+  ContainerDb(HeatingDatabase, "Heating Database", "MongoDB", "Хранит метрики с устройств и конфигурацию")
+  ContainerDb(TemperatureDatabase, "Temperature Database", "MongoDB", "Хранит метрики с устройств и конфигурацию")
+  ContainerDb(LightingDatabase, "Lighting Database", "MongoDB", "Хранит метрики с устройств и конфигурацию")
+
+  Container(ScheduleService, "Schedule Service", "NesJs", "Выполняет регламентные задания для умных устройств")
+  ContainerDb(ScheduleDatabase, "Schedule Database", "Postgres", "Хранит информацию о сценариях и историю")
+
+  ContainerQueue(MessageBroker, "Message Broker", "Kafka", "Управляет асинхронным взаимодействием сервисов")
+
+}
+
+Rel(user, WebApp, "Использует приложение")
+Rel(user, MobileApp, "Использует приложение")
+
+Rel(WebApp, APIGateway, "Http Request", "Отправляет REST-запрос")
+Rel(MobileApp, APIGateway, "Http Request", "Отправляет REST-запрос")
+
+Rel(heating, APIGateway, "Http Request", "Отправляет информацию с датчиков")
+Rel(temperature, APIGateway, "Http Request", "Отправляет информацию с датчиков")
+Rel(lighting, APIGateway, "Http Request", "Отправляет информацию с датчиков")
+
+Rel(APIGateway, AuthService, "Jwt-Токен", "Валидирует jwt-токен")
+
+Rel(AuthService, APIGateway, "json", "Получает информацию по авторизации пользователя")
+Rel(AuthService, AuthDatabase, "SQL", "Сохраняет данные пользователя")
+
+Rel(CoreService, CoreDatabase, "SQL", "Сохраняет данные умного дома")
+
+Rel(HeatingService, HeatingDatabase, "SQL", "Сохраняет информацию с датчиков")
+Rel(TemperatureService, TemperatureDatabase, "SQL", "Сохраняет информацию с датчиков")
+Rel(LightingService, LightingDatabase, "SQL", "Сохраняет информацию с датчиков")
+
+Rel(ScheduleService, ScheduleDatabase, "SQL", "Сохраняет информацию по сценариям")
+
+Rel(APIGateway, CoreService, "Http Request", "Перенаправляет запрос")
+Rel(APIGateway, HeatingService, "Http Request", "Перенаправляет запрос")
+Rel(APIGateway, TemperatureService, "Http Request", "Перенаправляет запрос")
+Rel(APIGateway, LightingService, "Http Request", "Перенаправляет запрос")
+
+Rel(HeatingService, MessageBroker, "Async", "Отправляет агрегированные данные")
+Rel(TemperatureService, MessageBroker, "Async", "Отправляет агрегированные данные")
+Rel(LightingService, MessageBroker, "Async", "Отправляет агрегированные данные")
+
+Rel(MessageBroker, CoreService, "Async", "Отправляет агрегированные данные")
+
+Rel(CoreService, MessageBroker, "Async", "Команды для управления датчиками")
+
+Rel(MessageBroker, HeatingService, "Async", "Команды для управления датчиками")
+Rel(MessageBroker, TemperatureService, "Async", "Команды для управления датчиками")
+Rel(MessageBroker, LightingService, "Async", "Команды для управления датчиками")
+
+Rel(ScheduleService, MessageBroker, "Async", "Команды для управления датчиками")
+
+@enduml

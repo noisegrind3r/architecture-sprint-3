@@ -1,0 +1,50 @@
+@startuml
+title SmartHome Core Service Component Diagram
+
+top to bottom direction
+
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+Container_Boundary(SmartHomeSystem, "SmartHome System") {
+  Container(CoreService, "SmartHome Service", "NestJs", "Управляет умными устройствами и быстро предоставляет данные")
+  ContainerDb(CoreDatabase, "SmartHome Database", "Postgres", "Агрегирует данные по датчикам в разрезе пользователей")
+
+  ContainerQueue(MessageBroker, "Message Broker", "Kafka", "Управляет асинхронным взаимодействием сервисов")
+}
+
+Container(CoreService, "SmartHome Service", "NestJs") {
+  Component(DeviceController, "DeviceController", "Управляет умными устройствами")
+
+  Component(HouseController, "HouseController", "Управляет домами пользователей")
+
+  Component(TaskController, "TaskController", "Управляет сценариями для умных устройств")
+
+  Component(DeviceServiceLayer, "Device Service Layer", "Бизнес-логика устройств")
+
+  Component(HouseServiceLayer, "House Service Layer", "Бизнес-логика домов пользователей")
+
+  Component(TaskServiceLayer, "Task Service Layer", "Бизнес-логика сценариев")
+
+  Component(DeviceRepositoryLayer, "Device Repository Layer", "Уровень доступа к данным устройств")
+
+  Component(HouseRepositoryLayer, "House Repository Layer", "Уровень доступа к данным домов пользователей")
+
+  Component(TaskRepositoryLayer, "Task Repository Layer", "Уровень доступа к данным сценариев")
+}
+
+Rel(DeviceController, DeviceServiceLayer, "Вызов методов логики")
+Rel(HouseController, HouseServiceLayer, "Вызов методов логики")
+Rel(TaskController, TaskServiceLayer, "Вызов методов логики")
+
+Rel(DeviceServiceLayer, DeviceRepositoryLayer, "Запись\чтение данных")
+Rel(HouseServiceLayer, HouseRepositoryLayer, "Запись\чтение данных")
+Rel(TaskServiceLayer, TaskRepositoryLayer, "Запись\чтение данных")
+
+Rel(DeviceRepositoryLayer, CoreDatabase, "SQL")
+Rel(HouseRepositoryLayer, CoreDatabase, "SQL")
+Rel(TaskRepositoryLayer, CoreDatabase, "SQL")
+
+Rel(DeviceServiceLayer, MessageBroker, "Async", "Команды для управления датчиками")
+Rel(MessageBroker, DeviceServiceLayer, "Async", "Отправляет агрегированные данные")
+Rel(TaskServiceLayer, MessageBroker, "Async", "Команды для управления датчиками")
+@enduml

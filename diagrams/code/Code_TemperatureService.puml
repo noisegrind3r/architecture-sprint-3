@@ -1,0 +1,28 @@
+@startuml
+title SmartHome Temperature Service Code Diagram
+
+top to bottom direction
+
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+class Settings {
+  +String deviceId
+  +json settings
+  +Settings get()
+  +void set()
+}
+
+class SensorData {
+  +DateTime timestamp
+  +string deviceId
+  +json data
+  +List<SensorData> get()
+  +void add()
+}
+
+class Command {
+  +string deviceId
+  +void execute()
+}
+
+@enduml

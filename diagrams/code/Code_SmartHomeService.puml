@@ -1,0 +1,50 @@
+@startuml
+title SmartHome Core Service Code Diagram
+
+top to bottom direction
+
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+class House {
+  +String name
+  +String userId
+  +List<Device> devices
+  +List<House> get()
+  +void add()
+  +void delete()
+  +List<Device> deviceList()
+}
+
+class Device {
+  +String name
+  +DeviceType deviceType
+  +json 
+  +Device get()
+  +void add()
+  +void register()
+  +string lastSensorData()
+  +List<string> historySensorData()
+  +void command()
+}
+
+class DeviceType {
+  +String name
+  +String url
+  +void get()
+}
+
+class Task {
+  +String name
+  +Device device
+  +string cronString
+  +void get()
+  +void add()
+  +void execute()
+}
+
+
+House -> Device: calls
+Device -> DeviceType : calls
+Task <- Device : calls
+
+@enduml
