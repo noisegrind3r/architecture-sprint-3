@@ -44,11 +44,8 @@
 
 ### 5. Визуализация контекста системы — диаграмма С4
 
-```markdown
 [Диаграмма контекста системы](https://github.com/noisegrind3r/architecture-sprint-3/blob/sprint_3/diagrams/context/Context_AsIs.png)
 [Ссылка на код диаграммы (https://github.com/noisegrind3r/architecture-sprint-3/blob/sprint_3/diagrams/context/Context_AsIs.puml)
-
-```
 
 # Задание 2. Проектирование микросервисной архитектуры
 
