@@ -111,7 +111,8 @@
 
 [Ссылка на код диаграммы](https://github.com/noisegrind3r/architecture-sprint-3/blob/sprint_3/diagrams/code/Code_SmartHomeService.puml)
 
-[Диаграмма код сервиса умного устройства](https://github.com/noisegrind3r/architecture-sprint-3/blob/sprint_3/diagrams/code/Code_TemperatureService.png)
+ERD кода сервиса умного устройства не имеет связей между сущностями, поэтому, в будущем, возможно разделение сервиса на несколько
+[Диаграмма кода сервиса умного устройства](https://github.com/noisegrind3r/architecture-sprint-3/blob/sprint_3/diagrams/code/Code_TemperatureService.png)
 
 [Ссылка на код диаграммы](https://github.com/noisegrind3r/architecture-sprint-3/blob/sprint_3/diagrams/code/Code_TemperatureService.puml)
 
@@ -124,7 +125,7 @@
 
 [Ссылка на код диаграммы](https://github.com/noisegrind3r/architecture-sprint-3/blob/sprint_3/diagrams/erd/ERD_SmartHomeService.puml)
 
-
+ERD диаграмма сервиса умного устройства не имеет связей между сущностями, поэтому, в будущем, возможно разделение сервиса на несколько
 [Диаграмма ERD сервиса умного устройства](https://github.com/noisegrind3r/architecture-sprint-3/blob/sprint_3/diagrams/erd/ERD_TemperatureService.png)
 
 [Ссылка на код диаграммы](https://github.com/noisegrind3r/architecture-sprint-3/blob/sprint_3/diagrams/erd/ERD_TemperatureService.puml)
