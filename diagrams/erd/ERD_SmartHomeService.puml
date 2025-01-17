@@ -3,6 +3,22 @@ title SmartHome Temperature Core Service ERD Diagram
 
 top to bottom direction
 
+entity User {
+    id: guid <<PK>>
+    --
+    fullName: string
+    login: string
+    password (hash): string
+    role: string
+}
+
+entity UserIdHouseId {
+    id: guid <<PK>>
+    --
+    userId: guid <<FK>>
+    houseId: guid <<FK>>
+}
+
 entity House {
     id: guid <<PK>>
     --
@@ -42,6 +58,8 @@ entity Task {
     command: string
 }
 
+User }-- UserIdHouseId
+UserIdHouseId --{ House
 House --{ Device
 Device }-- DeviceType
 DeviceSensorData }-- Device
