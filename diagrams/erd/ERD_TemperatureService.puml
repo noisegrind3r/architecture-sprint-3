@@ -1,0 +1,28 @@
+@startuml
+title SmartHome Temperature Core Service ERD Diagram
+
+top to bottom direction
+
+entity Settings {
+    _id: ObjectId <<PK>>
+    --
+    device_id: string
+    settings: json
+}
+
+entity SensorData {
+    _id: ObjectId <<PK>>
+    --
+    device_id: string
+    data: json
+}
+
+entity CommandLog {
+    _id: ObjectId <<PK>>
+    --
+    device_id: string
+    timestamp: dateTime
+    logData: json
+}
+
+@enduml

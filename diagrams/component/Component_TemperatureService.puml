@@ -1,0 +1,41 @@
+@startuml
+title SmartHome Temperature Service Component Diagram
+
+top to bottom direction
+
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+Container_Boundary(SmartHomeSystem, "SmartHome System") {
+  Container(TemperatureService, "Temperature Service", "NestJs", "Управляет датчиками температуры")
+  ContainerDb(TemperatureDatabase, "Temperature Database", "MongoDb", "Хранит данные с датчиков и конфигурацию")
+
+  ContainerQueue(MessageBroker, "Message Broker", "Kafka", "Управляет асинхронным взаимодействием сервисов")
+}
+
+Container(TemperatureService, "Temperature Service", "NestJs") {
+  Component(ConfigurationController, "ConfigurationController", "Управляет конфигурацией")
+  Component(DataSensorController, "DataSensorController", "Управляет данными датчиков устройств")
+  Component(CommandController, "CommandController", "Управляет командами для устройств")
+
+  Component(ConfigurationServiceLayer, "Configuration Service Layer", "Бизнес-логика конфигураций")
+  Component(DataSensorServiceLayer, "DataSensor Service Layer", "Бизнес-логика данных с устройств")
+  Component(CommandServiceLayer, "Command Service Layer", "Бизнес-логика команд для устройств")
+
+  Component(ConfigurationRepositoryLayer, "Configuration Repository Layer", "Уровень доступа к данным конфигураций")
+  Component(DataSensorRepositoryLayer, "DataSensor Repository Layer", "Уровень доступа к данным с устройств")
+}
+
+Rel(ConfigurationController, ConfigurationServiceLayer, "Вызов методов логики")
+Rel(DataSensorController, DataSensorServiceLayer, "Вызов методов логики")
+Rel(CommandController, CommandServiceLayer, "Вызов методов логики")
+
+Rel(ConfigurationServiceLayer, ConfigurationRepositoryLayer, "Запись\чтение данных")
+Rel(DataSensorServiceLayer, DataSensorRepositoryLayer, "Запись\чтение данных")
+
+Rel(ConfigurationRepositoryLayer, TemperatureDatabase, "SQL")
+Rel(DataSensorRepositoryLayer, TemperatureDatabase, "SQL")
+
+Rel(DataSensorServiceLayer, MessageBroker, "Async", "Отправляет агрегированные данные")
+Rel(MessageBroker, CommandServiceLayer, "Async", "Команды для управления датчиками")
+
+@enduml

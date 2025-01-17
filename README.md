@@ -1,3 +1,8 @@
+#Выполнение задания 3 спринта описано в файле Project_template_part_1.md (выполнены задания 1-3)
+
+[Project_template_part_1.md](https://github.com/noisegrind3r/architecture-sprint-3/blob/sprint_3/Project_template_part_1.md)
+
+
 # Базовая настройка
 
 ## Запуск minikube
